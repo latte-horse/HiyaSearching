@@ -1,0 +1,25 @@
+package Test.Test;
+
+import java.io.File;
+
+import kr.co.shineware.nlp.komoran.modeler.builder.ModelBuilder;
+
+public class ModelKomoranTest {
+
+	public static void main(String[] args) {
+		modelSave();
+		modelLoad();
+
+	}
+	private static void modelLoad() {
+		ModelBuilder builder =new ModelBuilder();
+		builder.load("C:/Users/user/Documents/카카오톡 받은 파일/dummy_news/[단독]머리 무차별 폭행 여자화장실서 '묻지마 폭행'..용의자 도주.txt");
+	}
+	private static void modelSave(){
+		ModelBuilder builder =new ModelBuilder();
+		builder.setExternalDic(File.separator);
+		
+		builder.buildPath("C:/Users/user/Documents/카카오톡 받은 파일/dummy_news/save");
+		builder.save("C:/Users/user/Documents/카카오톡 받은 파일/dummy_news/save");
+	}
+}

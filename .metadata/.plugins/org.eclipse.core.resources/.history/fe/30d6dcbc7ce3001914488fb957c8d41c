@@ -1,0 +1,35 @@
+package Test.Test;
+
+import kr.co.shineware.nlp.komoran.interfaces.FileAccessible;
+
+public class ModelKomoranTest {
+
+	public static void main(String[] args) {
+		
+	        
+	        FileAccessible file= new FileAccessible() {
+				
+				public void save(String arg0) {
+					
+					
+				}
+				
+				public void load(String arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+
+			 Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+		        String strToAnalyze = save();
+		        
+	        KomoranResult analyzeResultList = komoran.analyze(strToAnalyze);
+
+	        System.out.println(analyzeResultList.getPlainText());
+
+	        List<Token> tokenList = analyzeResultList.getTokenList();
+	        for (Token token : tokenList) {
+	            System.out.format("(%2d, %2d) %s/%s\n", token.getBeginIndex(), token.getEndIndex(), token.getMorph(), token.getPos());
+	        }
+	}
+}
