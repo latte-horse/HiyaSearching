@@ -1,7 +1,5 @@
 package Test.Test;
 
-import java.io.FileWriter;
-import java.sql.Savepoint;
 import java.util.List;
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
