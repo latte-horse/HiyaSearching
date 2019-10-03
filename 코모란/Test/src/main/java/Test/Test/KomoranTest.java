@@ -1,8 +1,12 @@
-package Test.Test;
+ package Test.Test;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,7 +31,7 @@ public class KomoranTest  {
 	public static void main(String[] args) {
 	  
 		Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
-		File file= new  File("C:/Users/student/Documents/카카오톡 받은 파일/dummy_news"); //파일 경로 저장
+		File file= new  File("C:/Users/user/Documents/카카오톡 받은 파일/dummy_news"); //파일 경로 저장
 		
 		//파일인지 확인
 		FileFilter fileFilter =new FileFilter() {
@@ -57,18 +61,48 @@ public class KomoranTest  {
 		Charset cs=StandardCharsets.UTF_8;
 		//파일 본문 담을 리스트
 	  List<String> listcont=new ArrayList<String>();
-	  FileWriter writer=null; 
+	 
+	  int i=1;
+	  PrintWriter pw=null;
 	  for(String re:listre) {
+		  //파일 읽기
 		  Scanner scan=new Scanner(re);
-		  String scanre=scan.nextLine();
+		 String scanre=scan.nextLine();
+		  
+		  
 		  KomoranResult analyzeResultList = komoran.analyze(scanre);
 		  List<Token> tokenList = analyzeResultList.getTokenList();
 		  
 		  
-		  for (Token token : tokenList) {
-	        	
-	            System.out.format("(%2d, %2d) %s/%s\n", token.getBeginIndex(), token.getEndIndex(), token.getMorph(), token.getPos());
-	        }
+		  File file1=new File("C:/Users/user/Documents/카카오톡 받은 파일/dummy_news/결과"+ i++ +".txt");
+		  System.out.print(re);
+		  try {
+		  pw=new  PrintWriter(file1);
+		  
+		   if(file1.isFile() && file1.canWrite()) {
+			   
+			   for(Token token:tokenList) {
+				   
+			 
+			   pw.format("(%2d, %2d) %s/%s\n", token.getBeginIndex(), token.getEndIndex(), token.getMorph(), token.getPos());
+			  
+			   pw.flush();
+			   }
+		   }
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+				 
+				 
+			   
+		   }
+		  
+//			/*
+//			 * for (Token token : tokenList) {
+//			 * 
+//			 * System.out.format("(%2d, %2d) %s/%s\n", token.getBeginIndex(),
+//			 * token.getEndIndex(), token.getMorph(), token.getPos()); }
+//			 */
 
 	  }
 	   
@@ -79,4 +113,4 @@ public class KomoranTest  {
 
 	}
 
-}
+
