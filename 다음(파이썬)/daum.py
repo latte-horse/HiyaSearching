@@ -17,10 +17,11 @@ soup=BeautifulSoup(html,'html.parser')
 
 title_list=soup.select(".list_mini .rank_cont .link_issue")
 ranking=soup.select(".list_mini .rank_cont .ir_wa")
+#키워드 저장 장소 선언
 htmllist=[]
 del htmllist[:]
 for top in title_list:
-    
+    #하나씩 저장 
     htmllist.append(top.text)
 
 #키워드 뽑히나 확인!
@@ -56,10 +57,8 @@ for keyword in htmllist:
 
 
 #############################################파일 저장       
-#저장할 파일 경로
-filepath = pathlib.Path("C:/바탕화면/example.json")
 #json으로저장 
-with open('word.json','w',encoding = "utf-8") as make_file:
+with open('C:/바탕화면/word.json','w',encoding = "utf-8") as make_file:
     json.dump(daumlist,make_file,ensure_ascii = False,indent="\t")
     
 
