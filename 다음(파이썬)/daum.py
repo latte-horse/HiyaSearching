@@ -26,8 +26,8 @@ for top in title_list:
 #키워드 뽑히나 확인!
 print(htmllist)
 
-###########################################키워드로 뉴스 검
-#url를 나눈다(page랑 
+###########################################키워드로 뉴스 검색
+#url를 나눈다(page 1,2,3 넣고 keyword넣기 위해서)
 furl="https://search.daum.net/search?w=news&sort=recency&q="
 surl="&cluster=n&DA=STC&s=NS&a=STCF&dc=STC&pg=1&r=1&p="
 lurl="&rc=1&at=more&sd=&ed=&period="
@@ -55,7 +55,7 @@ for keyword in htmllist:
     daumlist.append({"keyword":keyword,"items":daumitem})
 
 
-#############################################파일 저        
+#############################################파일 저장       
 #저장할 파일 경로
 filepath = pathlib.Path("C:/바탕화면/example.json")
 #json으로저장 
