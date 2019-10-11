@@ -121,62 +121,7 @@ def NaverSearch(search_words, cnt):
     return result_list
 
 
-#########################################다음에서 키워드 검색 후 html content 뽑아오는 함수 
-
-### 다음에서 검색하기
-#키워드 네이버+다음 한후에 다음에서 검색하는 함수! 
-
-
-def DaumSearchSave(keyword):
-    now=datetime.now()
-    nowTime =  now.strftime("%y%m%d")
-    #nowTimeTime = str((int(now.strftime("%H")) / 10 * 10) + int((now.strftime("%M")) / 10 * 10))
-    nowTimeTime =  "%02d%02d" % (now.hour ,now.minute // 10 * 10)
-    #2칸을 채우는데 빈곳은 0으로 채운다. 
-    num = 1
-    #키워드 네이버+다음을 한다.
-    for i in keyword:
-        #
-        result = DaumSearch(i , 3)
-        df = pd.DataFrame( result )
-        #경로 하나 만들고
-        n = "%02d" % (num)
-        filepath = ("C:/바탕화면/" + nowTime + "/" + nowTimeTime + "/" + "D_K_"+ n)
-        if not os.path.isdir(filepath):
-            os.makedirs(filepath)
-            os.chdir(filepath)
-        else:
-            os.chdir(filepath)
-        num2=1
-        #html 저장하는 것 하나 만들기
-        for link,title in zip(df['link'] , df['title']):
-            try:
-                url = requests.get(link , timeout = 10)
-                #soup = BeautifulSoup(url , 'html.parser' , from_encoding = 'utf-8')
-                soup = BeautifulSoup(url.content,'html.parser')
-                savefilelist = soup.html.body
-                savefiletitle=title
-                f = open(str(num2) +".html" , mode = "w" , encoding = 'utf-8')
-                f.write(savefiletitle)
-                f.write(savefilelist.text)
-            except requests.exceptions.Timeout as errt:
-                print ("Timeout Error:",errt) 
-            except requests.exceptions.TooManyRedirects as rerr:
-                print (rerr)
-            except requests.exceptions.RequestException as e:
-                print (e)
-            except requests.exceptions.HTTPError as err:
-                print (err)
-            except requests.exceptions.ContentDecodingError as derr:
-                print (derr)
-            except AttributeError as ea:
-                print (ea)
-            finally:
-               
-                f.close()
-                num2+=1
-        num+=1
-#########################################네이버에서 키워드 검색 후 html content 뽑아오는 함수 
+#########################################네이버와 다음에서 키워드 검색 후 html content 뽑아오는 함수 
 
 def SearchSave(keyword,site):
     now=datetime.now()
@@ -188,8 +133,8 @@ def SearchSave(keyword,site):
     #키워드 네이버+다음을 한다.
     for i in keyword:
         #
-        result1 = NaverSearch(i , 30) # 링크 30개.......?
-        result2 = DaumSearch(i , 3) # 페이지 3페이
+        result1 = NaverSearch(i , 30) # 네이버에서 링크 30개.......?
+        result2 = DaumSearch(i , 3) # 다음에서  페이지 3페이지 총 30개 !
         df = pd.DataFrame( result1 + result2 )
         #경로 하나 만들고
         n = "%02d" % (num)
