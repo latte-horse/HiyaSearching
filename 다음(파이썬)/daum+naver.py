@@ -241,17 +241,7 @@ def SearchSave(keyword,site):
 #DaumSearchSave(getTotalKeywords())
 
 # Daum D Naver N의 키워드를 검색하는 것!
-#SearchSave(getNaverKeywords() ,  "N") 으로 함수 적
+#SearchSave(getNaverKeywords() ,  "N") 으로 함수 적용 
 SearchSave(getDaumKeywords() , "D")
 
- 
 
-### 네이버에서 검색하기
-
-
-
-### 구글에서 검색하기
-
-
-
-### 트위터에서 검색하기
