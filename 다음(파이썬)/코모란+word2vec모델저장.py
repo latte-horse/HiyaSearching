@@ -27,7 +27,7 @@ koko1 = []
 del koko1[:]
 
 
-
+##함수 사용해서 폴더 속의 파일 모두 가져오기!
 
 for filelist in result:
     try:
@@ -42,9 +42,6 @@ for filelist in result:
             if(len(testr[i]) >= 2):
                 kkk.append(testr[i])
         koko1.append(kkk)
-              
-        
-        
     except Exception as e:
         print(e)
 
@@ -56,9 +53,9 @@ for filelist in result:
 
 
 
-model1 = Word2Vec(koko1, size = 200 ,  window = 2 , iter = 100 , sg = 1 , workers = 3 )
+model1 = Word2Vec(koko1 , size = 200 ,  window = 2 , iter = 100 , sg = 1 , workers = 3 )
 #model2 = Word2Vec(koko2, size = 200 ,  window = 2 , iter = 100 , sg = 1 , workers = 3 )
-#model11 = Word2Vec(koko1, size = 200 ,  window = 2 , iter = 100 , sg = 0 , workers = 3)
+model11 = Word2Vec(koko1 , size = 200 ,  window = 2 , iter = 100 , sg = 0 , workers = 3)
 #model21 = Word2Vec(koko2, size = 200 ,  window = 2 , iter = 100 , sg = 0 , workers = 3)
 ##########################################
 #size =  한 단어당 몇 차원 벡터?
@@ -72,13 +69,13 @@ model1 = Word2Vec(koko1, size = 200 ,  window = 2 , iter = 100 , sg = 1 , worker
 ########################################### 키워드('노조')와 연관된 단어 모음 20개
 # positive 관련높은 것 negative 관련 없는 것
 
-kokoresult1 = model1.most_similar(positive = ["노조"] ,  topn = 20 )
-#kokoresult11 = model2.most_similar(positive = ["1호선"] ,  topn = 20 )
-#kokoresult2 = model11.most_similar(positive = ["1호선"] ,  topn = 20 )
+kokoresult1 = model1.most_similar(positive = ["지하철파업"] ,  topn = 20 )
+kokoresult11 = model11.most_similar(positive = ["지하철파업"] ,  topn = 20 )
+#kokoresult2 = model11.most_similar(positive = ["지하철파업"] ,  topn = 20 )
 #kokoresult21 = model21.most_similar(positive = ["1호선"] ,  topn = 20 )
 
 print(kokoresult1)
-#print(kokoresult11)
+print(kokoresult11)
 #print(kokoresult2)
 #print(kokoresult21)
 
@@ -86,7 +83,7 @@ print(kokoresult1)
 
 ########################################## 분석 모델 저장 장소
 model1.save('model1')
-#model11.save('model11')
+model11.save('model11')
 #model2.save('model2')
 #model21.save('model21')
 
