@@ -5,7 +5,7 @@ import sys
 
 #######################모델 불러오기!
 model1 = Word2Vec.load("model1")
-#model11 = Word2Vec.load("model11")
+model11 = Word2Vec.load("model11")
 #model2 = Word2Vec.load("model2")
 #model21 = Word2Vec.load("model21")
 
@@ -13,7 +13,7 @@ model1 = Word2Vec.load("model1")
 
 ####################### 키워드 넣어 검색!
 result1 = model1.most_similar(['노조'], topn = 20)
-#result2 = model11.most_similar(['노조'], topn = 20)
+result2 = model11.most_similar(['노조'], topn = 20)
 #result3 = model2.most_similar(['노조'], topn = 20)
 #result4 = model21.most_similar(['노조'], topn = 20)
 
@@ -39,7 +39,8 @@ def MakeResult(modelkeylist,modelname):
         listr = []
         for j in modelkeylist:
             
-            listr.append(1 - modelname.similarity(i,j))
+            listr.append(modelname.similarity(i,j))
+
         #열 추가! 이렇게 해야 행렬 안에 깔끔~히 들어간다.   
         df[i] =listr
     
@@ -50,15 +51,15 @@ def MakeResult(modelkeylist,modelname):
 sys.stdout = open('./result.txt' , 'w')
 
 a = MakeResult(keylist(result1) , model1)
-#b = MakeResult(keylist(result2) , model11)
+b = MakeResult(keylist(result2) , model11)
 #c = MakeResult(keylist(result3) , model2)
 #d = MakeResult(keylist(result4) , model21)
 #e = MakeResult(jin , model1)
 print(keylist(result1))
 print(a)
 
-#print(keylist(result2))
-#print(b)
+print(keylist(result2))
+print(b)
 #print(keylist(result3))
 #print(c)
 #print(keylist(result4))
@@ -68,10 +69,42 @@ print(a)
 sys.stdout.close()
 
 a.to_csv("a.csv" , mode = 'w' , encoding = 'ms949')
-#b.to_csv("b.csv" , mode = 'w' , encoding = 'ms949')
+b.to_csv("b.csv" , mode = 'w' , encoding = 'ms949')
 #c.to_csv("c.csv" , mode = 'w' , encoding = 'ms949')
 #d.to_csv("d.csv" , mode = 'w' , encoding = 'ms949')
 
 #####################
 
     
+###### 시각화?
+# from sklearn.manifold import TSNE
+# import matplotlib.pyplot as plt
+
+# def tsne_plot(model):
+#     labels = []
+#     tokens = []
+
+#     for word in model.wv.vocab:
+#         tokens.append(model[word])
+#         labels.append(word)
+
+#     tsne_model = TSNE(perplexity=40, n_components=2, init='pca', n_iter=2500, random_state=23)
+#     new_values = tsne_model.fit_transform(tokens)
+
+#     x = []
+#     y = []
+#     for value in new_values:
+#         x.append(value[0])
+#         y.append(value[1])
+        
+#     plt.figure(figsize=(16, 16)) 
+#     for i in range(len(x)):
+#         plt.scatter(x[i],y[i])
+#         plt.annotate(labels[i],
+#                         xy=(x[i], y[i]),
+#                         xytext=(5, 2),
+#                         textcoords='offset points',
+#                         ha='right',
+#                         va='bottom')
+#     plt.show()
+# tsne_plot(model1)
