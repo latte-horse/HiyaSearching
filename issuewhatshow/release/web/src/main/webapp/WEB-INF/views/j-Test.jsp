@@ -70,7 +70,11 @@
 		            node, // lookAt ({ x, y, z })
 		            3000  // ms transition duration
 		        );
-	        })		
+	        })	
+	        .onNodeRightClick(node =>window.open("https://search.daum.net/search?w=news&sort=recency&q="+
+	        		group+"&cluster=n&DA=STC&s=NS&a=STCF&dc=STC&pg=1&r=1&p=1"+
+	        			"&rc=1&at=more&sd=&ed=&period=" , 'window 팝업' , 'width = 300 , height = 300 , menubar = no , toolbar = no' ))
+	        
 	        .graphData(gData);    
     
 		const linkForce = graph
