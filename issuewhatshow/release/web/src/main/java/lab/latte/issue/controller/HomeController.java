@@ -58,4 +58,15 @@ public class HomeController {
 		return "main-test";
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/j-Test" , method = RequestMethod.GET)
+	public String jtest() {
+		return "j-Test";
+	}
 }
