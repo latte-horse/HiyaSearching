@@ -1,5 +1,0 @@
-INDEX VERSION 1.131
-C:\연습용\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1369228649.index
-\web\src\main\java
-C:\연습용\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\412242554.index
-\web\src\main\java

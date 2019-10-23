@@ -1,5 +1,0 @@
-package lab.latte.issue.dao;
-
-public interface TestDAO {
-
-}
