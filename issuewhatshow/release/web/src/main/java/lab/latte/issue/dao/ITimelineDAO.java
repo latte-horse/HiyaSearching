@@ -6,4 +6,5 @@ public interface ITimelineDAO {
 	
 	public TimelineVO getLastTimeline();
 //	public List<EmployeeVO> getEmployees(HashMap<String, Object> hm);
+	
 }

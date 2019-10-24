@@ -49,19 +49,20 @@
 		        success: function(data){
 		        	console.log("success: apis/getLastTimeline");
 		        	vis2force(data);
+		        	whatTime(data);
 		        },
 		        error: function(equest,status,error) {
 		        	console.error("fail: apis/getLastTImeline");
 		        },
 		        data: JSON.stringify(parcel)
+		        	
 		    });
   		});
   	});
-  	
-  	
+  
   	
   	function vis2force(data){
-  		console.log(data)
+  		//console.log(data)
   		
   		var nodesJson = [];
   		var linkJson = [];
@@ -93,10 +94,10 @@
   				)
   			}
 			nodesJson.push(node);
-			console.log(node);
+			//console.log(node);
   		});
   			  			
-  			
+		
   		//link 처리
   		//dmatrix 는 link 부분이므로 나중에...
   		var dmatrix = visdata['dmatrix'];
@@ -143,12 +144,13 @@
  				}
  			}
  			tempLinks.forEach(function(d, k){
-				console.log(d);
+				//console.log(d);
 				linkJson.push(d);
 			});
 		}  			
  		
-  		drawGalaxy({ 
+  		//실제 노드를 뿌려주는 함수
+		drawGalaxy({ 
 			nodes: nodesJson,
 			links: linkJson
 		});
@@ -168,11 +170,11 @@
   	}
   	
   	
+  	
   	function drawGalaxy(gData){
   		console.log(gData);
-  		
   		const graph = ForceGraph3D()
-		(document.getElementById('3d-graph')) 	   
+  		(document.getElementById('3d-graph'))   
 		.nodeAutoColorBy('group')      
         .nodeThreeObject(node => {
 			const obj = new THREE.Mesh(
@@ -190,11 +192,93 @@
         .graphData(gData);
   		
         //graph.d3Force('charge').strength(-500);
-
+        
+        //오른쪽 클릭 하면 검색! 
+		graph.onNodeRightClick(node => searchingnode(node , gData));
+        
 		const linkForce = graph
 	    	.d3Force('link')
 	    	.distance(link => link.dist);
-  		
+		
+	
+
+  	}	
+  	
+	//시간 빼오기
+   	var nowTime = null;
+  	var vdata = null;
+  	function whatTime(data){
+  		//console.log(data)
+  		nowTime ="20" + data['yymmdd'];
+  		vdata = JSON.parse(data['visdata'])
+  	}
+  	//클릭시 창 띠우기 해보자
+	function searchingnode(node , gData ){
+  		var num1node = null;
+  		var num2node = null;
+  		console.log(node['word'])
+  		//gData.nodes[node['index']-1]['index'] 하면 node index전의 값이 뽑힌다.
+  		//console.log(gData.links[node['index']].target['word'])
+  		//console.log(gData.links[node['index']].source['word'])
+  		var swap = "";
+  	  	
+  		//if(gData.nodes[node])
+  		//val 값으로 구현 하지만 실패실패 슬프당
+  	/* 	 for(var i=0 ; i<=vdata.nodes.length-1 ; i++){
+  			for(var j = 1 ; j<=vdata.nodes.length-1 ; j++){
+  				if(vdata.nodes[j-1]['val'] > vdata.nodes[j]['val']){
+  					swap = vdata.nodes[j-1]
+  					vdata.nodes[j-1] = vdata.nodes[j]
+  					vdata.nodes[j] = swap
+  					}
+  			}
+  		}
+  	  	console.log(vdata.nodes)
+		for(var i = 0 ; i <=vdata.nodes.length-1 ; i++){
+  	  		if(node['word'] == vdata.nodes[i]['word']){
+  	  			num1node = vdata.nodes[i+1]['word']
+  	  			//num2node = vdata.nodes[i+2]['word']
+  	  			
+  	  		}
+  	  	}  */
+  	  	
+  	  	//이번에는 거리로 해보자.
+  	  	//저장 리스트 
+  	  	var distlist = [];
+  	  	for(var i = 0 ; i<gData['links'].length ; i++){
+  	  		if(node['word'] == gData['links'][i].source['word'] || node['word'] == gData['links'][i].target['word']){
+  	  			distlist.push(gData['links'][i])
+  	  			
+  	  		}
+  	  	}
+  	  	console.log(distlist)
+  	  	
+  	  	//저장 리스트 이쁘게 배열 하자
+  	  	for(var i = 0 ; i< distlist.length ; i++){
+  	  		for(var j = 1 ; j<distlist.length ; j++){
+  	  			if(distlist[j-1].dist > distlist[j].dist){
+  	  				swap = distlist[j-1]
+  	  				distlist[j-1] = distlist[j]
+  	  				distlist[j] = swap
+  	  			}
+  	  		}
+  	  	}
+  	  /* 	var num1nodename = "";
+  	  	var num2nodename = "";
+  	  	 for(var i = 0 ; i <distlist.length[2] ; i++){
+  	  		if(distlist[i].source['word'] != node['word']){
+  	  			
+  	  		}
+  	  	} */
+  	  	
+			window.open("https://search.daum.net/search?DA=STC&cluster=y&ed="
+				+ nowTime + "235959"
+				+ "&https_on=on&nil_suggest=btn&period=u&q="
+				//+ node['word'] + "+" + num1node
+				+ node['word'] + "+" + distlist[0] + "+" +distlist[1]
+		    	+ "&sd="
+		    	+ nowTime + "000000"
+		    	+ "&w=news" , 'window 팝업' , 'width = 300 , height = 300 , menubar = no , toolbar = no' )
   	}
   	
   	

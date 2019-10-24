@@ -66,7 +66,8 @@ public class HomeController {
 	
 	
 	@RequestMapping(value = "/j-Test" , method = RequestMethod.GET)
-	public String jtest() {
+	public String jtest(String modelid) {
+		
 		return "j-Test";
 	}
 }
