@@ -212,10 +212,9 @@
   		nowTime ="20" + data['yymmdd'];
   		vdata = JSON.parse(data['visdata'])
   	}
-  	//클릭시 창 띠우기 해보자
+  	//클릭시 창 띄우기 해보자
 	function searchingnode(node , gData ){
-  		var num1node = null;
-  		var num2node = null;
+  		
   		console.log(node['word'])
   		//gData.nodes[node['index']-1]['index'] 하면 node index전의 값이 뽑힌다.
   		//console.log(gData.links[node['index']].target['word'])
@@ -263,19 +262,23 @@
   	  			}
   	  		}
   	  	}
-  	  /* 	var num1nodename = "";
-  	  	var num2nodename = "";
-  	  	 for(var i = 0 ; i <distlist.length[2] ; i++){
+  	  	//저장리스트에서 검색 할 것 만 뺴오자.
+  	  	var searchnode = [];
+  	  	 for(var i = 0 ; i <distlist.length[3] ; i++){
   	  		if(distlist[i].source['word'] != node['word']){
-  	  			
+  	  		searchnode.push(distlist[i].source['word'])
+  	  		 console.log(distlist[i].souuce['word'])
+  	  		}else{
+  	  		searchnode.push(distlist[i].target['word'])
   	  		}
-  	  	} */
-  	  	
+  	  	} 
+  	  	 console.log(searchnode[0])
+  	  	 //클릭시 검색되게!
 			window.open("https://search.daum.net/search?DA=STC&cluster=y&ed="
 				+ nowTime + "235959"
 				+ "&https_on=on&nil_suggest=btn&period=u&q="
 				//+ node['word'] + "+" + num1node
-				+ node['word'] + "+" + distlist[0] + "+" +distlist[1]
+				+ node['word'] + "+" + searchnode[0] + "+" + searchnode[1] + "+" + searchnode[2] + "+" + searchnode[3]
 		    	+ "&sd="
 		    	+ nowTime + "000000"
 		    	+ "&w=news" , 'window 팝업' , 'width = 300 , height = 300 , menubar = no , toolbar = no' )
