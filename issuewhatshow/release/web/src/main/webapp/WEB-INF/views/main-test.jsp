@@ -266,10 +266,10 @@
   	  	var searchnode = [];
   	  	 for(var i = 0 ; i <distlist.length[3] ; i++){
   	  		if(distlist[i].source['word'] != node['word']){
-  	  		searchnode.push(distlist[i].source['word'])
-  	  		 console.log(distlist[i].souuce['word'])
+  	  			searchnode.push(distlist[i].source['word'])
+  	  			 console.log(distlist[i].souuce['word'])
   	  		}else{
-  	  		searchnode.push(distlist[i].target['word'])
+  	  			searchnode.push(distlist[i].target['word'])
   	  		}
   	  	} 
   	  	 console.log(searchnode[0])
