@@ -264,10 +264,10 @@
   	  	}
   	  	//저장리스트에서 검색 할 것 만 뺴오자.
   	  	var searchnode = [];
-  	  	 for(var i = 0 ; i <distlist.length[3] ; i++){
+  	  	 for(var i = 0 ; i <4 ; i++){
   	  		if(distlist[i].source['word'] != node['word']){
   	  			searchnode.push(distlist[i].source['word'])
-  	  			 console.log(distlist[i].souuce['word'])
+  	  			 
   	  		}else{
   	  			searchnode.push(distlist[i].target['word'])
   	  		}
