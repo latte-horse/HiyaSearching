@@ -11,6 +11,8 @@
 	
 	<!--  util:properties id="envs" location="classpath:/properties/envs.properties" / --> 
 	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+	
 	<bean id="envProperties"
       class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 	  <property name="locations">

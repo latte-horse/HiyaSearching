@@ -1,19 +1,52 @@
 package lab.latte.issue.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.adapter.HttpWebHandlerAdapter;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.resource.HttpResource;
+
+import com.fasterxml.jackson.core.JsonParser;
 
 import lab.latte.issue.model.EmployeeVO;
+import lab.latte.issue.model.NaverApiVO;
 import lab.latte.issue.service.IHrService;
 
 /**
@@ -60,9 +93,122 @@ public class HomeController {
 
 	
 	
+	@Resource(name = "restTemplate")
+	protected RestTemplate restTemplate;
 	
-	
-	
+	@RequestMapping(value = "api/searching" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String searchNaver (String[] main , String keyword , String nowTime ,
+			Model model ) throws  IOException {//traindition = ture  배열 받기
+		String clientId = "lXA5GRw7Os5t_Hs1sF28";//애플리케이션 클라이언트 아이디값";
+        String clientSecret = "8DC2rlIJdi";//애플리케이션 클라이언트 시크릿값";
+//		List<NaverApiVO> list = null;
+//		String text = URLEncoder.encode(main[0] , "UTF-8");
+//
+//    	try {
+//    	String apiURL = "https://openapi.naver.com/v1/search/news.json?query="
+//    			+ main[0] + "+"
+//    			+ main[1] + "+"
+//    			+ main[2]
+//    			+ "&display=10&start=1&sort=sim";
+//    	System.out.print(main[0] + main[1] + main[2]);
+//    	URL url = new URL(apiURL);
+//    	HttpURLConnection con = (HttpURLConnection)url.openConnection(); 
+//    	
+//    	con.setRequestMethod("GET");
+//    	con.setRequestProperty("X-Naver-Client-Id", clientId);
+//    	con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+//    	
+//    	BufferedReader br;
+//    	br = new BufferedReader(new InputStreamReader(con.getInputStream() , "UTF-8"));
+//    	
+//    	String inputLine;
+//    	StringBuffer responsere = new StringBuffer();
+//    	while((inputLine = br.readLine()) != null) {
+//    		responsere.append(inputLine);
+//    	}
+//    	
+//    	br.close();
+//    	
+//    	System.out.println(responsere.toString());
+//    	
+//    	
+//    	
+//    	}catch(Exception e) {
+//    		e.printStackTrace();
+//    	}
+		try {
+		String apiURL = "https://openapi.naver.com/v1/search/news.json?query="
+    			+ main[0] + "+"
+    			+ main[1] + "+"
+    			+ main[2]
+    			+ "&display=10&start=1&sort=sim";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		Map<String,String> keyvalue = new HashMap<String, String>();
+		keyvalue.put("X-Naver-Client-Id" , clientId);
+		keyvalue.put( "X-Naver-Client-Secret", clientSecret);
+		
+		headers.setAll(keyvalue);
+		
+		HttpEntity entity = new HttpEntity("parameters" , headers);
+		ResponseEntity response = restTemplate.exchange(apiURL,  HttpMethod.GET , entity , String.class);
+		
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody().toString());
+		JSONArray docuArray = (JSONArray)jsonObject.get("items");
+		List originlink = new ArrayList();
+		List description = new ArrayList();
+		List items = new ArrayList();
+		for(int i = 0 ; i <docuArray.size() ; i++) {
+			JSONObject tmp = (JSONObject)docuArray.get(i);
+			
+			
+			items.add((String)tmp.get("items"));
+			System.out.print(items);
+			originlink.add((String)tmp.get("originlink"));
+			System.out.print(tmp.get("originlink"));
+			description.add((String)tmp.get("description"));
+			System.out.print(tmp.get("description"));
+		}
+		
+//		JSONObject docuObject = (JSONObject)docuArray.get(0);
+		model.addAttribute("originlink" , originlink);
+		model.addAttribute("description" , description);
+		model.addAttribute("items" , items);
+		
+		
+		
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+    	return "main-test";
+       
+//		URL url = new URL("https://search.daum.net/search?DA=STC&cluster=y&ed="
+//    			+ nowTime + "235959"
+//				+ "&https_on=on&nil_suggest=btn&period=u&q="
+//				//+ node['word'] + "+" + num1node
+//				+ keyword + "+" + main[0] + "+" + main[1] + "+" + main[2] + "+" + main[3]
+//		    	+ "&sd="
+//		    	+ nowTime + "000000"
+//		    	+ "&w=news");
+//  	 	
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+//        String line;
+//        int checkline = 0;
+//        while((line = reader.readLine()) != null) {
+//        	if(line.contains(s))
+//        }
+        
+        
+	}
 	
 	
 	@RequestMapping(value = "/j-Test" , method = RequestMethod.GET)
