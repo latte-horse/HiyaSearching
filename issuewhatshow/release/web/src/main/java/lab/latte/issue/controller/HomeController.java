@@ -97,10 +97,10 @@ public class HomeController {
 	protected RestTemplate restTemplate;
 	
 	@RequestMapping(value = "api/searching" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String searchNaver (String[] main , String keyword , String nowTime ,
-			Model model ) throws  IOException {//traindition = ture  배열 받기
-		String clientId = "lXA5GRw7Os5t_Hs1sF28";//애플리케이션 클라이언트 아이디값";
-        String clientSecret = "8DC2rlIJdi";//애플리케이션 클라이언트 시크릿값";
+	public String searchNaver (String[] main , String keyword , String nowTime  ,
+			Model model ) throws  IOException {//traindition = ture  諛곗뿴 諛쏄린
+		String clientId = "lXA5GRw7Os5t_Hs1sF28";//�븷�뵆由ъ��씠�뀡 �겢�씪�씠�뼵�듃 �븘�씠�뵒媛�";
+        String clientSecret = "8DC2rlIJdi";//�븷�뵆由ъ��씠�뀡 �겢�씪�씠�뼵�듃 �떆�겕由욧컪";
 //		List<NaverApiVO> list = null;
 //		String text = URLEncoder.encode(main[0] , "UTF-8");
 //
@@ -156,25 +156,30 @@ public class HomeController {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody().toString());
 		JSONArray docuArray = (JSONArray)jsonObject.get("items");
-		List originlink = new ArrayList();
+		List originallink = new ArrayList();
 		List description = new ArrayList();
-		List items = new ArrayList();
+		List title = new ArrayList();
+		System.out.println(jsonObject);
 		for(int i = 0 ; i <docuArray.size() ; i++) {
 			JSONObject tmp = (JSONObject)docuArray.get(i);
 			
+			title.add((String)tmp.get("title"));
 			
-			items.add((String)tmp.get("items"));
-			System.out.print(items);
-			originlink.add((String)tmp.get("originlink"));
-			System.out.print(tmp.get("originlink"));
+			System.out.print(tmp.get("title"));
+			originallink.add((String)tmp.get("originallink"));
+			System.out.println(tmp.get("originallink"));
 			description.add((String)tmp.get("description"));
-			System.out.print(tmp.get("description"));
+			System.out.println(tmp.get("description"));
 		}
 		
+		
+		
+		
+		
 //		JSONObject docuObject = (JSONObject)docuArray.get(0);
-		model.addAttribute("originlink" , originlink);
+		model.addAttribute("originallink" , originallink);
 		model.addAttribute("description" , description);
-		model.addAttribute("items" , items);
+		model.addAttribute("title" , title);
 		
 		
 		

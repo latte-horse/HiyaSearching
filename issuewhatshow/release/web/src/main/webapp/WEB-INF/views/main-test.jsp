@@ -1,10 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="java.util.Map"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
+
+<%-- <%@ page import="java.util.Map"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.List"%>
-<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.ArrayList"%> --%>
 
 
 <!DOCTYPE html>
@@ -56,14 +61,15 @@
 	}
 /* 안내 클릭시 나오는 페이지 */	
     .infoinnerpage{
-    	position:relative;
+    	position:fixed;
     	background-color:rgba( 255, 255, 255, 0.01 );
     	color:white;
     	margin:auto;    	
     	padding:0;
     	outline:0;
-    	width:600px;
+    	width:300px;
     	border:1px solid white;
+    	left:300px;
     }
 /* 안내 페이지 x닫음 버튼  */	    
     #xbutton {
@@ -130,11 +136,12 @@ button:hover:before,button:hover:after{
 </head>
 
 <body>
-
-  <!-- 이쁜 메뉴-->
-  <div id="topController">
+	
+	<div id="3d-graph"></div>
+		
+	<div id="topController">
 		<div id="infobuttondiv"> 
-			<span><button onclick="document.getElementById('info').style.display='block'">안내</button></span>
+			<span><button onload="document.getElementById('info').style.display='block'">안내</button></span>
 		</div>	
 		<div id="timer">
 			<span id="clocktext" style="font-kerning:none"></span>
@@ -143,8 +150,11 @@ button:hover:before,button:hover:after{
 			<span><button type="button" id="before">이전</button></span>
 			<span><button type="button" id="now">지금</button></span>
 			<span><button type="button" id="after">다음</button></span>
+			  
+			
 		</div>		
 	</div>
+
 
 
 
@@ -162,21 +172,17 @@ button:hover:before,button:hover:after{
 	<!-- 이용안내 시작 -->
  	<div id="info" class="infototaldiv">    
     	<div class="infoinnerpage">       
-        	<button onclick="document.getElementById('info').style.display='none'" id="xbutton">&times;</button>
+        	<button onload="document.getElementById('info').style.display='none'" id="xbutton">&times;</button>
 	        <div id="infonote">     
-	           <c:forEach items = "${items}"  var = "items">
-	           <h3><c:out value = "${items.items}"></c:out></h3>
-	           </c:forEach>
-	           <c:forEach items = "${description}" var="description">
-	           <p>{description}</p>
-	           </c:forEach>
+	    	
+	     
 	        	
 	        </div>
-     		<button onclick="document.getElementById('info').style.display='none'" id="closebutton">Close</button>
+     		<button onload="document.getElementById('info').style.display='none'" id="closebutton">Close</button>
     	</div>    
   	</div>
   	
-  	<script>  
+	<script>  
   	var modal = document.getElementById('info');
   	window.onclick = function(event) {
 		if (event.target == modal) {
@@ -184,6 +190,8 @@ button:hover:before,button:hover:after{
 	    }
 	} 
 	</script>
+	
+	
 	
 	
 	<!-- 시계 넣기 -->
@@ -238,12 +246,12 @@ button:hover:before,button:hover:after{
 		        dataType: 'json',
 		        contentType: 'application/json',
 		        success: function(data){
-		        	console.log("success: apis/getLastTimeline");
+		        	//console.log("success: apis/getLastTimeline");
 		        	vis2force(data);
 		        	whatTime(data);
 		        },
 		        error: function(equest,status,error) {
-		        	console.error("fail: apis/getLastTImeline");
+		        	//console.error("fail: apis/getLastTImeline");
 		        },
 		        data: JSON.stringify(parcel)
 		        	
@@ -253,7 +261,7 @@ button:hover:before,button:hover:after{
   
   	
   	function vis2force(data){
-  		//console.log(data)
+  		
   		
   		var nodesJson = [];
   		var linkJson = [];
@@ -296,7 +304,7 @@ button:hover:before,button:hover:after{
   		var dlines = dmatrix.split("\n");
   		dlines.pop();
   		dlines.forEach(function(d, i){
-  			console.log(d)
+  			//console.log(d)
   		});
   			
   		
@@ -336,7 +344,7 @@ button:hover:before,button:hover:after{
  				}
  			}
  			tempLinks.forEach(function(d, k){
-				//console.log(d);
+				
 				linkJson.push(d);
 			});
 		}  			
@@ -364,7 +372,7 @@ button:hover:before,button:hover:after{
   	
   	
   	function drawGalaxy(gData){
-  		console.log(gData);
+  		//console.log(gData);
   		const graph = ForceGraph3D()
   		(document.getElementById('3d-graph'))   
 		.nodeAutoColorBy('group')      
@@ -407,7 +415,7 @@ button:hover:before,button:hover:after{
   	//클릭시 창 띄우기 해보자
 	function searchingnode(node , gData ){
   		
-  		console.log(node['word'])
+  		
   		//gData.nodes[node['index']-1]['index'] 하면 node index전의 값이 뽑힌다.
   		//console.log(gData.links[node['index']].target['word'])
   		//console.log(gData.links[node['index']].source['word'])
@@ -442,7 +450,7 @@ button:hover:before,button:hover:after{
   	  			
   	  		}
   	  	}
-  	  	console.log(distlist)
+  	  	//console.log(distlist)
   	  	
   	  	//저장 리스트 이쁘게 배열 하자
   	  	for(var i = 0 ; i< distlist.length ; i++){
@@ -471,21 +479,27 @@ button:hover:before,button:hover:after{
   	  		method : 'post',
   	  		url : 'api/searching',
   	  		traditional : true,
+  	  		
   	  		data : {
   	  			'main' : searchnode,
   	  			'keyword' : node['word'],
   	  			'nowTime' : nowTime
   	  		},
-  	  		success : function(data){
+  	  		success : function searchresult(dataType){
   	  			console.log("success searching");
+  	  			
+  	  			console.log(dataType);
+  	  		    document.getElementById('info').style.display='none'
+  	  		    
   	  		},
-  	  		error : function(request , status , error){
+  	  		error : function searchresult(request , status , error){
   	  			console.log(error);
   	  		}
   	  		
   	  		
+  	  		
   	  	});
-  	  	 console.log(searchnode[0])
+  	  	 
   	  	 //클릭시 검색되게!
 			/* window.open("https://search.daum.net/search?DA=STC&cluster=y&ed="
 				+ nowTime + "235959"
@@ -497,6 +511,8 @@ button:hover:before,button:hover:after{
 		    	+ "&w=news" , 'window 팝업' , 'width = 300 , height = 300 , menubar = no , toolbar = no' ) */
     	
   	}
+  	
+  	
   	
   	
   </script>
