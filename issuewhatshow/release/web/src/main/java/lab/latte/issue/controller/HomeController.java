@@ -1,15 +1,6 @@
 package lab.latte.issue.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +9,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.ws.Response;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,16 +24,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.adapter.HttpWebHandlerAdapter;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.resource.HttpResource;
-
-import com.fasterxml.jackson.core.JsonParser;
 
 import lab.latte.issue.model.EmployeeVO;
-import lab.latte.issue.model.NaverApiVO;
 import lab.latte.issue.service.IHrService;
 
 /**
@@ -97,10 +78,13 @@ public class HomeController {
 	protected RestTemplate restTemplate;
 	
 	@RequestMapping(value = "api/searching" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String searchNaver (String[] main , String keyword , String nowTime  ,
+	@ResponseBody
+	public Map<String, Object> searchNaver (String[] main , String keyword , String nowTime  ,
 			Model model ) throws  IOException {//traindition = ture  諛곗뿴 諛쏄린
 		String clientId = "lXA5GRw7Os5t_Hs1sF28";//�븷�뵆由ъ��씠�뀡 �겢�씪�씠�뼵�듃 �븘�씠�뵒媛�";
         String clientSecret = "8DC2rlIJdi";//�븷�뵆由ъ��씠�뀡 �겢�씪�씠�뼵�듃 �떆�겕由욧컪";
+        
+        Map<String, Object> resultMap = new HashMap<String, Object>();
 //		List<NaverApiVO> list = null;
 //		String text = URLEncoder.encode(main[0] , "UTF-8");
 //
@@ -159,17 +143,17 @@ public class HomeController {
 		List originallink = new ArrayList();
 		List description = new ArrayList();
 		List title = new ArrayList();
-		System.out.println(jsonObject);
+		
 		for(int i = 0 ; i <docuArray.size() ; i++) {
 			JSONObject tmp = (JSONObject)docuArray.get(i);
 			
 			title.add((String)tmp.get("title"));
 			
-			System.out.print(tmp.get("title"));
+			
 			originallink.add((String)tmp.get("originallink"));
-			System.out.println(tmp.get("originallink"));
+			
 			description.add((String)tmp.get("description"));
-			System.out.println(tmp.get("description"));
+			
 		}
 		
 		
@@ -177,10 +161,14 @@ public class HomeController {
 		
 		
 //		JSONObject docuObject = (JSONObject)docuArray.get(0);
-		model.addAttribute("originallink" , originallink);
-		model.addAttribute("description" , description);
-		model.addAttribute("title" , title);
+//		model.addAttribute("originallink" , originallink);
+//		model.addAttribute("description" , description);
+//		model.addAttribute("title" , title);
+//		
 		
+		resultMap.put("description", description);
+		resultMap.put("title", title);
+		resultMap.put("originallink", originallink);
 		
 		
 		
@@ -194,7 +182,7 @@ public class HomeController {
 		
 		
 		
-    	return "main-test";
+    	return resultMap;
        
 //		URL url = new URL("https://search.daum.net/search?DA=STC&cluster=y&ed="
 //    			+ nowTime + "235959"

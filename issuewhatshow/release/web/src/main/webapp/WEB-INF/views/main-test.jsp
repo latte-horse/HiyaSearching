@@ -122,14 +122,46 @@ button:after{
 button:hover:before,button:hover:after{
   width:100%;
   transition:800ms ease all;
+}
+#newslist{
+position : absolute;
+height:100%;
+
+}
+div[id *= "infonote"] {
+ 	 background:rgba( 255, 255, 255, 0.01 );
+ 	 width: 300px;
+ 	 border: 1px solid white;
+ 	 padding: 0px;
+ 	 margin: 3px;
+ 	 content : "";
+ 	 color : white;	
+ 	 
+     left: 30px;
+     font-size:10px;
+     display:none , in-line block;
+     text-align: left;
+     height : 15%;
+     
+ 	 
+}
+div[id *="infonote"] ul{
+	font-size:2px;
+	text-align: left;
+	
+}
+#infopre{
+font-size:5px;
+
 }    
-    				
+#infonext{
+font-size:5px}    				
 </style>
 
 <head>
   <meta charset="UTF-8">
   <title>JH-test</title>
-  
+
   
   
   <style> body { margin: 0; } </style>
@@ -150,16 +182,24 @@ button:hover:before,button:hover:after{
 			<span><button type="button" id="before">이전</button></span>
 			<span><button type="button" id="now">지금</button></span>
 			<span><button type="button" id="after">다음</button></span>
-			  
+		
 			
-		</div>		
-	</div>
+		</div>
+		<div id ="newlist">
+			
+	   	<div id = "infonote1">     
+	    </div><div id = "infonote2">     
+	    </div><div id = "infonote3">     
+		</div><div id = "infonote4">
+	    </div>
+	    </div>
+		</div>
 
 
 
 
 
-
+   
   
   <h1>VISDATA to 3d-force 테스트</h1>
   <button type="button" id="btnGetLast">마지막 timeline visdata 가져오기</button>
@@ -172,13 +212,7 @@ button:hover:before,button:hover:after{
 	<!-- 이용안내 시작 -->
  	<div id="info" class="infototaldiv">    
     	<div class="infoinnerpage">       
-        	<button onload="document.getElementById('info').style.display='none'" id="xbutton">&times;</button>
-	        <div id="infonote">     
-	    	
-	     
-	        	
-	        </div>
-     		<button onload="document.getElementById('info').style.display='none'" id="closebutton">Close</button>
+       
     	</div>    
   	</div>
   	
@@ -479,25 +513,45 @@ button:hover:before,button:hover:after{
   	  		method : 'post',
   	  		url : 'api/searching',
   	  		traditional : true,
-  	  		
+  	  		dataType : "json",
+  	 		//contentType: "application/json;charset=utf-8",
   	  		data : {
   	  			'main' : searchnode,
   	  			'keyword' : node['word'],
   	  			'nowTime' : nowTime
   	  		},
-  	  		success : function searchresult(dataType){
+  	  		success : function searchresult(data){
   	  			console.log("success searching");
+  	  			console.log(data);
+  	  			console.log(data.originallink[5]);
+  	  			console.log(data.title[0]);
+  	  				
   	  			
-  	  			console.log(dataType);
-  	  		    document.getElementById('info').style.display='none'
-  	  		    
+  	  			
+  	  			//console.log(dataType.originallink);
+  	  			
+  	  			  for(var i=0 ; i < data.title.length ;i++){
+  	  				  console.log(data.title.length)
+  	  				 /* $('infonote').empty();  */
+  	  				try{
+  	  				$("#infonote"+i).css("display" , "block")
+  	  				 document.getElementById('infonote' + i).innerHTML = data.title[i] + "<br>" + "<ul>" + data.originallink[i] ;
+  	  				}catch(e){
+  	  				 console.log(e)
+  	  				}
+  	  			} 
+  	  			 
+  	  			
+  	  				
+  	  		/* 	
+  	  			$.each(resultMap , function(){
+  	  				$('infonote').empty();
+  	  				document.getElementById('infonote').innerHTML = resultMap.title+ "<br>" + resultMap.originallink;
+  	  			}) */
   	  		},
-  	  		error : function searchresult(request , status , error){
+  	  			error : function searchresult(request , status , error){
   	  			console.log(error);
   	  		}
-  	  		
-  	  		
-  	  		
   	  	});
   	  	 
   	  	 //클릭시 검색되게!
